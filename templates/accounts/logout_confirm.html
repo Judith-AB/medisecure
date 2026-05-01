@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Logout — MediSecure{% endblock %}
+{% block content %}
+<div style="max-width:400px;margin:4rem auto;text-align:center">
+    <div class="card">
+        <i class="fas fa-sign-out-alt" style="font-size:3rem;color:var(--primary);display:block;margin-bottom:1rem"></i>
+        <h2 style="margin-bottom:0.75rem">Sign Out?</h2>
+        <p class="text-muted mb-3">Your session will be terminated securely.</p>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-full" style="padding:0.875rem">
+                <i class="fas fa-sign-out-alt"></i> Yes, Sign Out
+            </button>
+        </form>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-full mt-2">Cancel</a>
+    </div>
+</div>
+{% endblock %}

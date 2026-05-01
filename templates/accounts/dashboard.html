@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard — MediSecure{% endblock %}
+{% block content %}
+<style>
+.dash-header { background:linear-gradient(135deg,rgba(0,180,216,0.15),rgba(0,119,182,0.1)); border:1px solid var(--border); border-radius:20px; padding:2rem; margin-bottom:2rem; display:flex; align-items:center; gap:1.5rem; }
+.dash-avatar { width:70px; height:70px; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.75rem; color:white; flex-shrink:0; }
+.stat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
+.stat-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:1.25rem; }
+.stat-card .stat-num { font-size:2rem; font-weight:800; color:var(--primary); }
+.stat-card .stat-label { color:var(--text-muted); font-size:0.82rem; margin-top:0.25rem; }
+.appt-row { display:flex; justify-content:space-between; align-items:center; padding:0.875rem; background:rgba(0,0,0,0.2); border-radius:10px; margin-bottom:0.5rem; }
+@media(max-width:768px){ .stat-grid { grid-template-columns:repeat(2,1fr); } }
+</style>
+
+<div class="dash-header">
+    <div class="dash-avatar">
+        <i class="fas {% if profile.is_patient %}fa-user-injured{% elif profile.is_doctor %}fa-user-md{% else %}fa-user-shield{% endif %}"></i>
+    </div>
+    <div>
+        <h1 style="font-size:1.6rem;font-weight:800">Welcome, {{ user.first_name|default:user.username }}!</h1>
+        <p class="text-muted">{{ user.email }} &bull;
+            <span class="role-badge role-{{ profile.role }}">{{ profile.role|title }}</span>
+        </p>
+        {% if profile.is_doctor and profile.specialization %}
+        <p class="text-muted" style="font-size:0.85rem;margin-top:0.25rem"><i class="fas fa-stethoscope"></i> {{ profile.specialization }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="stat-grid">
+    <div class="stat-card">
+        <div class="stat-num">{{ appointments|length }}</div>
+        <div class="stat-label"><i class="fas fa-calendar-check"></i> Appointments</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-num" style="color:#2ecc71">
+            {{ appointments|length }}
+        </div>
+        <div class="stat-label"><i class="fas fa-check-circle"></i> Active</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-num" style="color:#f39c12">
+            <i class="fas fa-shield-alt" style="font-size:1.5rem"></i>
+        </div>
+        <div class="stat-label">OWASP Protected</div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-num" style="color:#e74c3c">
+            <i class="fas fa-lock" style="font-size:1.5rem"></i>
+        </div>
+        <div class="stat-label">Session Secured</div>
+    </div>
+</div>
+
+<div class="grid grid-2">
+    <div class="card">
+        <h3 style="margin-bottom:1.25rem;font-weight:700">
+            <i class="fas fa-calendar-alt" style="color:var(--primary)"></i> Recent Appointments
+        </h3>
+        {% for appt in appointments %}
+        <div class="appt-row">
+            <div>
+                <div style="font-weight:600;font-size:0.9rem">
+                    {% if profile.is_patient %}Dr. {{ appt.doctor.first_name }} {{ appt.doctor.last_name }}
+                    {% else %}{{ appt.patient.first_name }} {{ appt.patient.last_name }}{% endif %}
+                </div>
+                <div class="text-muted" style="font-size:0.8rem">{{ appt.date }} at {{ appt.time }}</div>
+            </div>
+            <span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span>
+        </div>
+        {% empty %}
+        <div class="text-center text-muted" style="padding:2rem">
+            <i class="fas fa-calendar-times" style="font-size:2rem;display:block;margin-bottom:0.75rem"></i>
+            No appointments yet.
+        </div>
+        {% endfor %}
+        <div class="mt-2">
+            {% if profile.is_patient %}
+            <a href="{% url 'book_appointment' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Book Appointment</a>
+            {% endif %}
+            <a href="{% url 'my_appointments' %}" class="btn btn-secondary">View All</a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 style="margin-bottom:1.25rem;font-weight:700">
+            <i class="fas fa-shield-alt" style="color:var(--primary)"></i> Security Status
+        </h3>
+        {% for label, desc in security_items %}
+        <div style="display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:0.875rem">
+            <i class="fas fa-check-circle" style="color:var(--success);margin-top:0.15rem;flex-shrink:0"></i>
+            <div>
+                <div style="font-weight:600;font-size:0.875rem">{{ label }}</div>
+                <div class="text-muted" style="font-size:0.8rem">{{ desc }}</div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

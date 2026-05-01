@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}My Appointments — MediSecure{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+    <div class="page-title" style="margin-bottom:0">
+        <i class="fas fa-calendar-check" style="color:var(--primary)"></i> My Appointments
+    </div>
+    {% if user.profile.is_patient %}
+    <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Book New
+    </a>
+    {% endif %}
+</div>
+
+{% if appointments %}
+<div class="card" style="padding:0;overflow:hidden">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                {% if user.profile.is_patient %}<th>Doctor</th>{% else %}<th>Patient</th>{% endif %}
+                <th>Date</th>
+                <th>Time</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for appt in appointments %}
+            <tr>
+                <td style="color:var(--text-muted)">{{ appt.id }}</td>
+                <td>
+                    {% if user.profile.is_patient %}
+                    <div style="font-weight:600">Dr. {{ appt.doctor.first_name }} {{ appt.doctor.last_name }}</div>
+                    <div class="text-muted" style="font-size:0.8rem">{{ appt.doctor.profile.specialization }}</div>
+                    {% else %}
+                    <div style="font-weight:600">{{ appt.patient.first_name }} {{ appt.patient.last_name }}</div>
+                    <div class="text-muted" style="font-size:0.8rem">@{{ appt.patient.username }}</div>
+                    {% endif %}
+                </td>
+                <td>{{ appt.date }}</td>
+                <td>{{ appt.time }}</td>
+                <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                    {{ appt.reason|truncatechars:40 }}
+                </td>
+                <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+                <td>
+                    <div style="display:flex;gap:0.5rem">
+                        <a href="{% url 'appointment_detail' appt.pk %}" class="btn btn-secondary" style="padding:0.35rem 0.75rem;font-size:0.8rem">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        {% if user.profile.is_patient and appt.status == 'pending' %}
+                        <a href="{% url 'cancel_appointment' appt.pk %}" class="btn btn-danger" style="padding:0.35rem 0.75rem;font-size:0.8rem">
+                            <i class="fas fa-times"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="card text-center" style="padding:4rem">
+    <i class="fas fa-calendar-times" style="font-size:3rem;color:var(--primary);display:block;margin-bottom:1rem"></i>
+    <p class="text-muted mb-3">No appointments yet.</p>
+    {% if user.profile.is_patient %}
+    <a href="{% url 'book_appointment' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Book Your First Appointment
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

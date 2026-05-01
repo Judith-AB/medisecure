@@ -90,15 +90,27 @@ def logout_view(request):
 @never_cache
 def dashboard_view(request):
     profile = request.user.profile
-    context = {'profile': profile}
+    security_items = [
+        ("A01 — Access Control", "You only see your own records and appointments"),
+        ("A02 — Cryptographic Failures", "Password hashed with PBKDF2+SHA256"),
+        ("A03 — Injection", "All inputs sanitized with bleach, ORM used"),
+        ("A04 — Insecure Design", "Brute force lockout after 5 failed attempts"),
+        ("A05 — Misconfiguration", "Security headers active, .env used"),
+        ("A07 — Auth Failures", "Session fixation prevented, HTTPOnly cookies"),
+        ("A08 — Data Integrity", "File uploads verified by MIME type"),
+        ("A09 — Logging", "All events logged to security dashboard"),
+    ]
+    context = {'profile': profile, 'security_items': security_items}
     if profile.is_patient():
         from appointments.models import Appointment
         context['appointments'] = Appointment.objects.filter(patient=request.user).order_by('-date')[:5]
     elif profile.is_doctor():
         from appointments.models import Appointment
         context['appointments'] = Appointment.objects.filter(doctor=request.user).order_by('-date')[:5]
+    else:
+        from appointments.models import Appointment
+        context['appointments'] = Appointment.objects.all().order_by('-date')[:5]
     return render(request, 'accounts/dashboard.html', context)
-
 @login_required
 def profile_view(request):
     profile, _ = UserProfile.objects.get_or_create(user=request.user)

@@ -67,4 +67,9 @@ def security_logs(request):
 @require_admin
 def owasp_demo(request):
     """Live OWASP Top 10 demo panel"""
+    if request.method == 'POST':
+        # The middleware will auto-detect and log the attack attempts
+        # Just return OK — middleware handles logging
+        from django.http import JsonResponse
+        return JsonResponse({'status': 'logged'})
     return render(request, 'security/owasp_demo.html')

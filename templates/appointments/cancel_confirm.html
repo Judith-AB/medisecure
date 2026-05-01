@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Cancel Appointment — MediSecure{% endblock %}
+{% block content %}
+<div style="max-width:480px;margin:3rem auto">
+    <div class="card text-center">
+        <i class="fas fa-calendar-times" style="font-size:3rem;color:var(--danger);display:block;margin-bottom:1rem"></i>
+        <h2 style="margin-bottom:0.75rem">Cancel Appointment?</h2>
+        <p class="text-muted mb-3">
+            Appointment with Dr. {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}
+            on {{ appointment.date }} at {{ appointment.time }}
+        </p>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-full" style="padding:0.875rem">
+                <i class="fas fa-times"></i> Yes, Cancel It
+            </button>
+        </form>
+        <a href="{% url 'my_appointments' %}" class="btn btn-secondary btn-full mt-2">Go Back</a>
+    </div>
+</div>
+{% endblock %}

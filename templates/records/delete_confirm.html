@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Delete Record — MediSecure{% endblock %}
+{% block content %}
+<div style="max-width:480px;margin:3rem auto">
+    <div class="card text-center">
+        <i class="fas fa-exclamation-triangle" style="font-size:3rem;color:var(--danger);display:block;margin-bottom:1rem"></i>
+        <h2 style="margin-bottom:0.75rem">Delete Record?</h2>
+        <p class="text-muted mb-3">
+            "<strong>{{ record.title }}</strong>" for patient
+            {{ record.patient.first_name }} {{ record.patient.last_name }}.
+            This cannot be undone.
+        </p>
+        <form method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-full" style="padding:0.875rem">
+                <i class="fas fa-trash"></i> Yes, Delete Permanently
+            </button>
+        </form>
+        <a href="{% url 'record_detail' record.pk %}" class="btn btn-secondary btn-full mt-2">Cancel</a>
+    </div>
+</div>
+{% endblock %}
