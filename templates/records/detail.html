@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}{{ record.title }} — MediSecure{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <a href="{% url 'record_list' %}" style="color:var(--text-muted);text-decoration:none;font-size:0.875rem;display:inline-flex;align-items:center;gap:5px;margin-bottom:0.5rem"><i class="fas fa-arrow-left"></i> Back to Records</a>
+        <h1>{{ record.title }}</h1>
+        <p>{{ record.created_at|date:"F d, Y" }} &bull; Dr. {{ record.doctor.first_name }} {{ record.doctor.last_name }}</p>
+    </div>
+</div>
+
+<div class="grid grid-2" style="align-items:start">
+    <div>
+        <div class="card card-body mb-2">
+            <div style="display:flex;justify-content:space-between;margin-bottom:1.5rem">
+                <div>
+                    <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Patient</div>
+                    <div class="fw-600">{{ record.patient.first_name }} {{ record.patient.last_name }}</div>
+                </div>
+                <div style="text-align:right">
+                    <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px">Attending Doctor</div>
+                    <div class="fw-600">Dr. {{ record.doctor.first_name }} {{ record.doctor.last_name }}</div>
+                </div>
+            </div>
+            <div style="background:var(--surface2);border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+                <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem">Diagnosis</div>
+                <p style="font-size:0.9rem;line-height:1.7">{{ record.diagnosis }}</p>
+            </div>
+            {% if record.prescription %}
+            <div style="background:var(--surface2);border-radius:10px;padding:1.25rem;margin-bottom:1rem">
+                <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem">Prescription</div>
+                <p style="font-size:0.9rem;line-height:1.7">{{ record.prescription }}</p>
+            </div>
+            {% endif %}
+            {% if record.notes %}
+            <div style="background:var(--surface2);border-radius:10px;padding:1.25rem">
+                <div style="font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem">Additional Notes</div>
+                <p style="font-size:0.9rem;line-height:1.7">{{ record.notes }}</p>
+            </div>
+            {% endif %}
+        </div>
+        {% if record.attachment %}
+        <div class="card card-body">
+            <div style="font-weight:600;margin-bottom:0.75rem"><i class="fas fa-paperclip" style="color:var(--primary)"></i> Attachment</div>
+            <a href="{{ record.attachment.url }}" class="btn btn-secondary" target="_blank"><i class="fas fa-download"></i> Download File</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div>
+        {% if user.profile.is_doctor and record.doctor == user or user.profile.is_admin %}
+        <div class="card card-body">
+            <div style="font-weight:600;margin-bottom:1rem;color:var(--danger)"><i class="fas fa-exclamation-triangle"></i> Danger Zone</div>
+            <p style="font-size:0.875rem;color:var(--text-muted);margin-bottom:1rem">Permanently delete this medical record. This action cannot be undone.</p>
+            <a href="{% url 'delete_record' record.pk %}" class="btn btn-danger btn-full"><i class="fas fa-trash"></i> Delete Record</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

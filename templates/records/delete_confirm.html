@@ -2,19 +2,18 @@
 {% block title %}Delete Record — MediSecure{% endblock %}
 {% block content %}
 <div style="max-width:480px;margin:3rem auto">
-    <div class="card text-center">
-        <i class="fas fa-exclamation-triangle" style="font-size:3rem;color:var(--danger);display:block;margin-bottom:1rem"></i>
-        <h2 style="margin-bottom:0.75rem">Delete Record?</h2>
-        <p class="text-muted mb-3">
-            "<strong>{{ record.title }}</strong>" for patient
-            {{ record.patient.first_name }} {{ record.patient.last_name }}.
+    <div class="card card-body text-center">
+        <div style="width:56px;height:56px;background:var(--danger-bg);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--danger);margin:0 auto 1.25rem">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2 style="font-family:'DM Serif Display',serif;font-weight:400;margin-bottom:0.5rem">Delete Record?</h2>
+        <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem">
+            "<strong>{{ record.title }}</strong>" for {{ record.patient.first_name }} {{ record.patient.last_name }}.<br>
             This cannot be undone.
         </p>
         <form method="POST">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-full" style="padding:0.875rem">
-                <i class="fas fa-trash"></i> Yes, Delete Permanently
-            </button>
+            <button type="submit" class="btn btn-danger btn-full btn-lg"><i class="fas fa-trash"></i> Delete Permanently</button>
         </form>
         <a href="{% url 'record_detail' record.pk %}" class="btn btn-secondary btn-full mt-2">Cancel</a>
     </div>

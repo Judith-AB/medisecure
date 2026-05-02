@@ -1,69 +1,34 @@
 {% extends 'base.html' %}
 {% block title %}Profile — MediSecure{% endblock %}
 {% block content %}
-<style>
-.profile-grid { display:grid; grid-template-columns:280px 1fr; gap:2rem; }
-.profile-sidebar { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:2rem; text-align:center; height:fit-content; }
-.avatar-circle { width:80px; height:80px; background:linear-gradient(135deg,var(--primary),var(--primary-dark)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; color:white; margin:0 auto 1rem; }
-@media(max-width:768px){ .profile-grid { grid-template-columns:1fr; } }
-</style>
-
-<div class="profile-grid">
-    <div>
-        <div class="profile-sidebar">
-            <div class="avatar-circle">
-                <i class="fas {% if profile.is_patient %}fa-user-injured{% elif profile.is_doctor %}fa-user-md{% else %}fa-user-shield{% endif %}"></i>
-            </div>
-            <h3 style="font-weight:700">{{ user.first_name }} {{ user.last_name }}</h3>
-            <p class="text-muted" style="font-size:0.85rem">@{{ user.username }}</p>
-            <span class="role-badge role-{{ profile.role }}" style="display:inline-block;margin-top:0.5rem">{{ profile.role|title }}</span>
-            <div class="section-divider"></div>
-            <a href="{% url 'my_appointments' %}" class="btn btn-secondary btn-full mb-1"><i class="fas fa-calendar-check"></i> My Appointments</a>
-            {% if profile.is_patient %}
-            <a href="{% url 'record_list' %}" class="btn btn-secondary btn-full mb-1"><i class="fas fa-file-medical"></i> My Records</a>
-            {% endif %}
+<div class="page-header"><div><h1>My Profile</h1><p>Manage your account information</p></div></div>
+<div style="display:grid;grid-template-columns:240px 1fr;gap:1.5rem;align-items:start">
+    <div class="card card-body" style="text-align:center">
+        <div style="width:72px;height:72px;background:var(--primary-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.75rem;color:var(--primary);margin:0 auto 1rem">
+            <i class="fas {% if profile.is_patient %}fa-user-injured{% elif profile.is_doctor %}fa-user-md{% else %}fa-user-shield{% endif %}"></i>
         </div>
+        <div class="fw-600" style="margin-bottom:3px">{{ user.first_name }} {{ user.last_name }}</div>
+        <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem">@{{ user.username }}</div>
+        <span class="role-pill role-{{ profile.role }}">{{ profile.role|title }}</span>
+        <div class="divider"></div>
+        <a href="{% url 'my_appointments' %}" class="btn btn-secondary btn-full mb-1"><i class="fas fa-calendar-check"></i> Appointments</a>
+        {% if profile.is_patient %}<a href="{% url 'record_list' %}" class="btn btn-secondary btn-full"><i class="fas fa-file-medical"></i> My Records</a>{% endif %}
     </div>
-    <div>
-        <div class="card">
-            <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:1.5rem">
-                <i class="fas fa-user-edit" style="color:var(--primary)"></i> Edit Profile
-            </h2>
-            <form method="POST" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="grid grid-2">
-                    <div class="form-group">
-                        <label>First Name</label>{{ form.first_name }}
-                        {% if form.first_name.errors %}<ul class="errorlist">{% for e in form.first_name.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-                    </div>
-                    <div class="form-group">
-                        <label>Last Name</label>{{ form.last_name }}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Phone</label>{{ form.phone }}
-                    {% if form.phone.errors %}<ul class="errorlist">{% for e in form.phone.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-                <div class="form-group">
-                    <label>Date of Birth</label>{{ form.date_of_birth }}
-                </div>
-                <div class="form-group">
-                    <label>Address <span class="text-muted" style="font-size:0.8rem">(HTML tags stripped — XSS prevention)</span></label>
-                    {{ form.address }}
-                </div>
-                {% if profile.is_doctor %}
-                <div class="form-group">
-                    <label>Specialization</label>{{ form.specialization }}
-                </div>
-                {% endif %}
-                <div class="form-group">
-                    <label>Profile Picture <span class="text-muted" style="font-size:0.8rem">(JPG/PNG/GIF, max 2MB — A08 file validation)</span></label>
-                    {{ form.profile_pic }}
-                    {% if form.profile_pic.errors %}<ul class="errorlist">{% for e in form.profile_pic.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-                <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
-            </form>
-        </div>
+    <div class="card card-body">
+        <div style="font-family:'DM Serif Display',serif;font-size:1.15rem;margin-bottom:1.5rem">Edit Profile</div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="grid grid-2">
+                <div class="form-group"><label class="form-label">First Name</label>{{ form.first_name }}{% if form.first_name.errors %}<ul class="errorlist">{% for e in form.first_name.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+                <div class="form-group"><label class="form-label">Last Name</label>{{ form.last_name }}</div>
+            </div>
+            <div class="form-group"><label class="form-label">Phone</label>{{ form.phone }}{% if form.phone.errors %}<ul class="errorlist">{% for e in form.phone.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+            <div class="form-group"><label class="form-label">Date of Birth</label>{{ form.date_of_birth }}</div>
+            <div class="form-group"><label class="form-label">Address</label>{{ form.address }}</div>
+            {% if profile.is_doctor %}<div class="form-group"><label class="form-label">Specialization</label>{{ form.specialization }}</div>{% endif %}
+            <div class="form-group"><label class="form-label">Profile Picture <span style="color:var(--text-light);font-weight:400">(JPG/PNG, max 2MB)</span></label>{{ form.profile_pic }}{% if form.profile_pic.errors %}<ul class="errorlist">{% for e in form.profile_pic.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
+        </form>
     </div>
 </div>
 {% endblock %}

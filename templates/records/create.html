@@ -1,60 +1,47 @@
 {% extends 'base.html' %}
-{% block title %}Create Medical Record — MediSecure{% endblock %}
+{% block title %}New Medical Record — MediSecure{% endblock %}
 {% block content %}
-<div style="max-width:700px;margin:0 auto">
-    <div class="page-title">
-        <i class="fas fa-file-medical-alt" style="color:var(--primary)"></i> Create Medical Record
+<div class="page-header">
+    <div>
+        <h1>Create Medical Record</h1>
+        <p>Document patient diagnosis and prescription</p>
     </div>
-
-    <div style="background:rgba(0,180,216,0.08);border:1px solid rgba(0,180,216,0.2);border-radius:10px;padding:1rem;margin-bottom:1.5rem;font-size:0.85rem;color:var(--text-muted)">
-        <i class="fas fa-shield-alt" style="color:var(--primary)"></i>
-        <strong>Security Active:</strong> File uploads validated by real MIME type (not extension) using python-magic.
-        Only JPG, PNG, GIF, PDF allowed. Max 5MB. Filenames sanitized. All text fields stripped of HTML tags.
-        <strong>(A08 — Software & Data Integrity)</strong>
-    </div>
-
-    <div class="card">
+</div>
+<div style="max-width:700px">
+    <div class="card card-body">
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
-                <label><i class="fas fa-user-injured" style="color:var(--primary)"></i> Patient</label>
+                <label class="form-label">Patient</label>
                 {{ form.patient }}
                 {% if form.patient.errors %}<ul class="errorlist">{% for e in form.patient.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
             </div>
             <div class="form-group">
-                <label><i class="fas fa-heading" style="color:var(--primary)"></i> Record Title</label>
+                <label class="form-label">Record Title</label>
                 {{ form.title }}
                 {% if form.title.errors %}<ul class="errorlist">{% for e in form.title.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
             </div>
             <div class="form-group">
-                <label>
-                    <i class="fas fa-stethoscope" style="color:var(--primary)"></i> Diagnosis
-                    <span class="text-muted" style="font-size:0.8rem">(HTML tags stripped automatically)</span>
-                </label>
+                <label class="form-label">Diagnosis</label>
                 {{ form.diagnosis }}
                 {% if form.diagnosis.errors %}<ul class="errorlist">{% for e in form.diagnosis.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
             </div>
             <div class="form-group">
-                <label><i class="fas fa-prescription-bottle-alt" style="color:var(--primary)"></i> Prescription</label>
+                <label class="form-label">Prescription</label>
                 {{ form.prescription }}
             </div>
             <div class="form-group">
-                <label><i class="fas fa-sticky-note" style="color:var(--primary)"></i> Notes</label>
+                <label class="form-label">Additional Notes</label>
                 {{ form.notes }}
             </div>
             <div class="form-group">
-                <label>
-                    <i class="fas fa-paperclip" style="color:var(--primary)"></i> Attachment
-                    <span class="text-muted" style="font-size:0.8rem">(JPG/PNG/PDF only, max 5MB — MIME type verified)</span>
-                </label>
+                <label class="form-label">Attachment <span style="color:var(--text-light);font-weight:400">(JPG, PNG, PDF — max 5MB)</span></label>
                 {{ form.attachment }}
                 {% if form.attachment.errors %}<ul class="errorlist">{% for e in form.attachment.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
             </div>
-            <div style="display:flex;gap:1rem;margin-top:0.5rem">
-                <button type="submit" class="btn btn-primary" style="padding:0.875rem 2rem">
-                    <i class="fas fa-save"></i> Create Record
-                </button>
-                <a href="{% url 'record_list' %}" class="btn btn-secondary">Cancel</a>
+            <div style="display:flex;gap:0.75rem;margin-top:0.5rem">
+                <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Create Record</button>
+                <a href="{% url 'record_list' %}" class="btn btn-secondary btn-lg">Cancel</a>
             </div>
         </form>
     </div>

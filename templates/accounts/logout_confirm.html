@@ -1,16 +1,16 @@
 {% extends 'base.html' %}
-{% block title %}Logout — MediSecure{% endblock %}
+{% block title %}Sign Out — MediSecure{% endblock %}
 {% block content %}
 <div style="max-width:400px;margin:4rem auto;text-align:center">
-    <div class="card">
-        <i class="fas fa-sign-out-alt" style="font-size:3rem;color:var(--primary);display:block;margin-bottom:1rem"></i>
-        <h2 style="margin-bottom:0.75rem">Sign Out?</h2>
-        <p class="text-muted mb-3">Your session will be terminated securely.</p>
+    <div class="card card-body">
+        <div style="width:56px;height:56px;background:var(--danger-bg);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--danger);margin:0 auto 1.25rem">
+            <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <h2 style="font-family:'DM Serif Display',serif;font-weight:400;margin-bottom:0.5rem">Sign Out?</h2>
+        <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem">You will be securely signed out of your account.</p>
         <form method="POST">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-full" style="padding:0.875rem">
-                <i class="fas fa-sign-out-alt"></i> Yes, Sign Out
-            </button>
+            <button type="submit" class="btn btn-danger btn-full btn-lg"><i class="fas fa-sign-out-alt"></i> Yes, Sign Out</button>
         </form>
         <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-full mt-2">Cancel</a>
     </div>

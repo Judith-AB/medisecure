@@ -2,90 +2,20 @@
 {% block title %}Security Logs — MediSecure{% endblock %}
 {% block content %}
 <style>
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(6, 1fr);
-        gap: 1rem;
-        margin-bottom: 2rem;
-    }
-
-    .stat-box {
-        background: var(--card);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 1.25rem;
-        text-align: center;
-    }
-
-    .stat-box .num {
-        font-size: 1.75rem;
-        font-weight: 800;
-    }
-
-    .stat-box .lbl {
-        color: var(--text-muted);
-        font-size: 0.75rem;
-        margin-top: 0.25rem;
-    }
-
-    .filters {
-        display: flex;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-
-    .filters select {
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--border);
-        color: var(--text);
-        border-radius: 8px;
-        padding: 0.5rem 0.875rem;
-        outline: none;
-        font-size: 0.875rem;
-    }
-
-    .filters select option {
-        background: var(--dark);
-    }
-
-    .event-badge {
-        font-size: 0.78rem;
-        font-weight: 600;
-        padding: 0.2rem 0.6rem;
-        border-radius: 6px;
-    }
-
-    .ev-success {
-        background: rgba(46, 204, 113, 0.15);
-        color: #2ecc71;
-    }
-
-    .ev-danger {
-        background: rgba(231, 76, 60, 0.2);
-        color: #e74c3c;
-    }
-
-    .ev-warning {
-        background: rgba(243, 156, 18, 0.15);
-        color: #f39c12;
-    }
-
-    .ev-info {
-        background: rgba(0, 180, 216, 0.15);
-        color: var(--primary);
-    }
-
-    .threat-row {
-        background: rgba(231, 76, 60, 0.05);
-    }
-
-    @media(max-width:900px) {
-        .stats-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-    }
+.stats-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:1rem; margin-bottom:2rem; }
+.stat-box { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:1.25rem; text-align:center; }
+.stat-box .num { font-size:1.75rem; font-weight:800; }
+.stat-box .lbl { color:var(--text-muted); font-size:0.75rem; margin-top:0.25rem; }
+.filters { display:flex; gap:0.75rem; margin-bottom:1.5rem; flex-wrap:wrap; align-items:center; }
+.filters select { background:rgba(0,0,0,0.3); border:1px solid var(--border); color:var(--text); border-radius:8px; padding:0.5rem 0.875rem; outline:none; font-size:0.875rem; }
+.filters select option { background:var(--dark); }
+.event-badge { font-size:0.78rem; font-weight:600; padding:0.2rem 0.6rem; border-radius:6px; }
+.ev-success { background:rgba(46,204,113,0.15); color:#2ecc71; }
+.ev-danger { background:rgba(231,76,60,0.2); color:#e74c3c; }
+.ev-warning { background:rgba(243,156,18,0.15); color:#f39c12; }
+.ev-info { background:rgba(0,180,216,0.15); color:var(--primary); }
+.threat-row { background:rgba(231,76,60,0.05); }
+@media(max-width:900px){ .stats-grid { grid-template-columns:repeat(3,1fr); } }
 </style>
 
 <div class="page-title">
@@ -125,16 +55,15 @@
         <select name="event" onchange="this.form.submit()">
             <option value="">All Event Types</option>
             {% for value, label in event_types %}
-            <option value="{{ value }}" {% if event_filter==value %}selected{% endif %}>{{ label }}</option>
+            <option value="{{ value }}" {% if event_filter == value %}selected{% endif %}>{{ label }}</option>
             {% endfor %}
         </select>
         <select name="threats" onchange="this.form.submit()">
             <option value="">All Logs</option>
-            <option value="1" {% if threat_filter=='1' %}selected{% endif %}>Threats Only</option>
+            <option value="1" {% if threat_filter == '1' %}selected{% endif %}>Threats Only</option>
         </select>
         {% if event_filter or threat_filter %}
-        <a href="{% url 'security_logs' %}" class="btn btn-secondary"
-            style="padding:0.5rem 0.875rem;font-size:0.875rem">
+        <a href="{% url 'security_logs' %}" class="btn btn-secondary" style="padding:0.5rem 0.875rem;font-size:0.875rem">
             <i class="fas fa-times"></i> Clear
         </a>
         {% endif %}
@@ -161,15 +90,27 @@
                     {{ log.timestamp|date:"M d H:i:s" }}
                 </td>
                 <td>
-                    <span
-                        class="event-badge {% if log.event_type == 'LOGIN_SUCCESS' %}ev-success{% elif log.event_type == 'LOGIN_FAILED' or log.event_type == 'ACCOUNT_LOCKED' %}ev-danger{% elif log.event_type == 'XSS_ATTEMPT' or log.event_type == 'SQLI_ATTEMPT' %}ev-danger{% elif log.event_type == 'ACCESS_DENIED' %}ev-warning{% else %}ev-info{% endif %}">
-                        {{ log.event_type }}
-                    </span>
+                    {% if log.event_type == 'LOGIN_SUCCESS' %}
+                    <span class="event-badge ev-success">{{ log.event_type }}</span>
+                    {% elif log.event_type == 'LOGIN_FAILED' %}
+                    <span class="event-badge ev-danger">{{ log.event_type }}</span>
+                    {% elif log.event_type == 'ACCOUNT_LOCKED' %}
+                    <span class="event-badge ev-danger">{{ log.event_type }}</span>
+                    {% elif log.event_type == 'XSS_ATTEMPT' %}
+                    <span class="event-badge ev-danger">{{ log.event_type }}</span>
+                    {% elif log.event_type == 'SQLI_ATTEMPT' %}
+                    <span class="event-badge ev-danger">{{ log.event_type }}</span>
+                    {% elif log.event_type == 'ACCESS_DENIED' %}
+                    <span class="event-badge ev-warning">{{ log.event_type }}</span>
+                    {% elif log.event_type == 'BRUTE_FORCE' %}
+                    <span class="event-badge ev-warning">{{ log.event_type }}</span>
+                    {% else %}
+                    <span class="event-badge ev-info">{{ log.event_type }}</span>
+                    {% endif %}
                 </td>
                 <td style="font-size:0.875rem">{{ log.user.username|default:"anonymous" }}</td>
                 <td style="font-size:0.875rem;font-family:monospace">{{ log.ip_address }}</td>
-                <td
-                    style="font-size:0.8rem;color:var(--text-muted);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                <td style="font-size:0.8rem;color:var(--text-muted);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
                     {{ log.path }}
                 </td>
                 <td style="font-size:0.82rem;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
@@ -195,16 +136,17 @@
 {% if logs.has_other_pages %}
 <div style="display:flex;justify-content:center;gap:0.5rem;margin-top:1.5rem">
     {% if logs.has_previous %}
-    <a href="?page={{ logs.previous_page_number }}{% if event_filter %}&event={{ event_filter }}{% endif %}"
-        class="btn btn-secondary"><i class="fas fa-chevron-left"></i></a>
+    <a href="?page={{ logs.previous_page_number }}{% if event_filter %}&event={{ event_filter }}{% endif %}" class="btn btn-secondary">
+        <i class="fas fa-chevron-left"></i>
+    </a>
     {% endif %}
-    <span
-        style="padding:0.625rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:0.875rem">
+    <span style="padding:0.625rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:10px;font-size:0.875rem">
         Page {{ logs.number }} of {{ logs.paginator.num_pages }}
     </span>
     {% if logs.has_next %}
-    <a href="?page={{ logs.next_page_number }}{% if event_filter %}&event={{ event_filter }}{% endif %}"
-        class="btn btn-secondary"><i class="fas fa-chevron-right"></i></a>
+    <a href="?page={{ logs.next_page_number }}{% if event_filter %}&event={{ event_filter }}{% endif %}" class="btn btn-secondary">
+        <i class="fas fa-chevron-right"></i>
+    </a>
     {% endif %}
 </div>
 {% endif %}
