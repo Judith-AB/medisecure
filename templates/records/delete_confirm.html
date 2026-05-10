@@ -1,20 +1,16 @@
 {% extends 'base.html' %}
 {% block title %}Delete Record — MediSecure{% endblock %}
 {% block content %}
-<div style="max-width:480px;margin:3rem auto">
+<div style="max-width:440px;margin:3rem auto">
     <div class="card card-body text-center">
-        <div style="width:56px;height:56px;background:var(--danger-bg);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--danger);margin:0 auto 1.25rem">
+        <div style="width:52px;height:52px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--red);margin:0 auto 1.25rem">
             <i class="fas fa-exclamation-triangle"></i>
         </div>
-        <h2 style="font-family:'DM Serif Display',serif;font-weight:400;margin-bottom:0.5rem">Delete Record?</h2>
-        <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem">
-            "<strong>{{ record.title }}</strong>" for {{ record.patient.first_name }} {{ record.patient.last_name }}.<br>
-            This cannot be undone.
+        <h2 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:0.5rem">Delete Record?</h2>
+        <p style="color:var(--text2);font-size:0.825rem;margin-bottom:1.5rem">
+            "<strong style="color:var(--text)">{{ record.title }}</strong>" for {{ record.patient.first_name }} {{ record.patient.last_name }}.<br>This cannot be undone.
         </p>
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-full btn-lg"><i class="fas fa-trash"></i> Delete Permanently</button>
-        </form>
+        <form method="POST">{% csrf_token %}<button type="submit" class="btn btn-danger btn-full btn-lg"><i class="fas fa-trash"></i> Delete Permanently</button></form>
         <a href="{% url 'record_detail' record.pk %}" class="btn btn-secondary btn-full mt-2">Cancel</a>
     </div>
 </div>

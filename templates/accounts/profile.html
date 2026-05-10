@@ -2,31 +2,31 @@
 {% block title %}Profile — MediSecure{% endblock %}
 {% block content %}
 <div class="page-header"><div><h1>My Profile</h1><p>Manage your account information</p></div></div>
-<div style="display:grid;grid-template-columns:240px 1fr;gap:1.5rem;align-items:start">
+<div style="display:grid;grid-template-columns:220px 1fr;gap:1.25rem;align-items:start">
     <div class="card card-body" style="text-align:center">
-        <div style="width:72px;height:72px;background:var(--primary-light);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.75rem;color:var(--primary);margin:0 auto 1rem">
-            <i class="fas {% if profile.is_patient %}fa-user-injured{% elif profile.is_doctor %}fa-user-md{% else %}fa-user-shield{% endif %}"></i>
+        <div style="width:64px;height:64px;background:var(--teal-dim);border:1px solid rgba(45,212,191,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--teal);margin:0 auto 1rem">
+            <i class="fas {% if profile.is_patient %}fa-user-injured{% elif profile.is_doctor %}fa-stethoscope{% else %}fa-shield-alt{% endif %}"></i>
         </div>
-        <div class="fw-600" style="margin-bottom:3px">{{ user.first_name }} {{ user.last_name }}</div>
-        <div style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem">@{{ user.username }}</div>
+        <div class="fw-600" style="margin-bottom:2px">{{ user.first_name }} {{ user.last_name }}</div>
+        <div style="font-size:0.775rem;color:var(--text2);margin-bottom:0.75rem">@{{ user.username }}</div>
         <span class="role-pill role-{{ profile.role }}">{{ profile.role|title }}</span>
         <div class="divider"></div>
         <a href="{% url 'my_appointments' %}" class="btn btn-secondary btn-full mb-1"><i class="fas fa-calendar-check"></i> Appointments</a>
         {% if profile.is_patient %}<a href="{% url 'record_list' %}" class="btn btn-secondary btn-full"><i class="fas fa-file-medical"></i> My Records</a>{% endif %}
     </div>
     <div class="card card-body">
-        <div style="font-family:'DM Serif Display',serif;font-size:1.15rem;margin-bottom:1.5rem">Edit Profile</div>
+        <div class="section-title">Edit Profile</div>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="grid grid-2">
-                <div class="form-group"><label class="form-label">First Name</label>{{ form.first_name }}{% if form.first_name.errors %}<ul class="errorlist">{% for e in form.first_name.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+                <div class="form-group"><label class="form-label">First Name</label>{{ form.first_name }}</div>
                 <div class="form-group"><label class="form-label">Last Name</label>{{ form.last_name }}</div>
             </div>
             <div class="form-group"><label class="form-label">Phone</label>{{ form.phone }}{% if form.phone.errors %}<ul class="errorlist">{% for e in form.phone.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
             <div class="form-group"><label class="form-label">Date of Birth</label>{{ form.date_of_birth }}</div>
             <div class="form-group"><label class="form-label">Address</label>{{ form.address }}</div>
             {% if profile.is_doctor %}<div class="form-group"><label class="form-label">Specialization</label>{{ form.specialization }}</div>{% endif %}
-            <div class="form-group"><label class="form-label">Profile Picture <span style="color:var(--text-light);font-weight:400">(JPG/PNG, max 2MB)</span></label>{{ form.profile_pic }}{% if form.profile_pic.errors %}<ul class="errorlist">{% for e in form.profile_pic.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+            <div class="form-group"><label class="form-label">Profile Picture <span style="color:var(--text3)">(max 2MB)</span></label>{{ form.profile_pic }}</div>
             <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Changes</button>
         </form>
     </div>

@@ -2,59 +2,26 @@
 {% block title %}Appointment Details — MediSecure{% endblock %}
 {% block content %}
 <div class="page-header">
-    <div>
-        <a href="{% url 'my_appointments' %}" style="color:var(--text-muted);text-decoration:none;font-size:0.875rem;display:inline-flex;align-items:center;gap:5px;margin-bottom:0.5rem"><i class="fas fa-arrow-left"></i> Back</a>
-        <h1>Appointment #{{ appointment.id }}</h1>
-    </div>
-    <span class="badge badge-{{ appointment.status }}" style="font-size:0.875rem;padding:6px 14px">{{ appointment.get_status_display }}</span>
+    <div><a href="{% url 'my_appointments' %}" class="back-link"><i class="fas fa-arrow-left"></i> Back</a><h1>Appointment #{{ appointment.id }}</h1></div>
+    <span class="badge badge-{{ appointment.status }}" style="font-size:0.8rem;padding:5px 12px">{{ appointment.get_status_display }}</span>
 </div>
-
 <div class="grid grid-2" style="align-items:start">
     <div class="card card-body">
-        <div class="section-title" style="font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:1.25rem">Appointment Details</div>
-        {% for label, value in details %}
-        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--border)">
-            <span style="color:var(--text-muted);font-size:0.875rem">{{ label }}</span>
-            <span style="font-weight:500;font-size:0.875rem">{{ value }}</span>
-        </div>
-        {% endfor %}
-        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--border)">
-            <span style="color:var(--text-muted);font-size:0.875rem">Patient</span>
-            <span style="font-weight:500;font-size:0.875rem">{{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--border)">
-            <span style="color:var(--text-muted);font-size:0.875rem">Doctor</span>
-            <span style="font-weight:500;font-size:0.875rem">Dr. {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--border)">
-            <span style="color:var(--text-muted);font-size:0.875rem">Date & Time</span>
-            <span style="font-weight:500;font-size:0.875rem">{{ appointment.date }} at {{ appointment.time }}</span>
-        </div>
-        <div style="padding:0.75rem 0">
-            <span style="color:var(--text-muted);font-size:0.875rem;display:block;margin-bottom:0.35rem">Reason</span>
-            <span style="font-size:0.875rem">{{ appointment.reason }}</span>
-        </div>
-        {% if appointment.notes %}
-        <div style="padding:0.75rem 0;border-top:1px solid var(--border)">
-            <span style="color:var(--text-muted);font-size:0.875rem;display:block;margin-bottom:0.35rem">Doctor Notes</span>
-            <span style="font-size:0.875rem">{{ appointment.notes }}</span>
-        </div>
-        {% endif %}
+        <div class="section-title">Details</div>
+        {% for label, val in forloop.parentloop.parentloop.parentloop.context.details %}{% endfor %}
+        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--border)"><span style="color:var(--text2);font-size:0.825rem">Patient</span><span style="font-weight:600;font-size:0.825rem">{{ appointment.patient.first_name }} {{ appointment.patient.last_name }}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--border)"><span style="color:var(--text2);font-size:0.825rem">Doctor</span><span style="font-weight:600;font-size:0.825rem">Dr. {{ appointment.doctor.first_name }} {{ appointment.doctor.last_name }}</span></div>
+        <div style="display:flex;justify-content:space-between;padding:0.75rem 0;border-bottom:1px solid var(--border)"><span style="color:var(--text2);font-size:0.825rem">Date &amp; Time</span><span style="font-weight:600;font-size:0.825rem">{{ appointment.date }} at {{ appointment.time }}</span></div>
+        <div style="padding:0.875rem 0"><span style="color:var(--text2);font-size:0.825rem;display:block;margin-bottom:0.35rem">Reason</span><span style="font-size:0.85rem">{{ appointment.reason }}</span></div>
+        {% if appointment.notes %}<div style="padding:0.75rem 0;border-top:1px solid var(--border)"><span style="color:var(--text2);font-size:0.825rem;display:block;margin-bottom:0.35rem">Doctor Notes</span><span style="font-size:0.85rem">{{ appointment.notes }}</span></div>{% endif %}
     </div>
-
     {% if form %}
     <div class="card card-body">
-        <div class="section-title" style="font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:1.25rem">Update Appointment</div>
-        <form method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label class="form-label">Status</label>{{ form.status }}
-            </div>
-            <div class="form-group">
-                <label class="form-label">Notes</label>{{ form.notes }}
-                {% if form.notes.errors %}<ul class="errorlist">{% for e in form.notes.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-            </div>
-            <button type="submit" class="btn btn-primary btn-full"><i class="fas fa-save"></i> Save Update</button>
+        <div class="section-title">Update</div>
+        <form method="POST">{% csrf_token %}
+            <div class="form-group"><label class="form-label">Status</label>{{ form.status }}</div>
+            <div class="form-group"><label class="form-label">Notes</label>{{ form.notes }}{% if form.notes.errors %}<ul class="errorlist">{% for e in form.notes.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+            <button type="submit" class="btn btn-primary btn-full"><i class="fas fa-save"></i> Save</button>
         </form>
     </div>
     {% endif %}

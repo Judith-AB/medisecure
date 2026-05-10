@@ -2,57 +2,50 @@
 {% block title %}Sign In — MediSecure{% endblock %}
 {% block extra_css %}
 <style>
-.auth-page { min-height: calc(100vh - 62px); display:flex; align-items:center; justify-content:center; padding: 2rem; background: linear-gradient(135deg, #f0f7fa 0%, #e8f4f8 100%); margin: -2rem; }
-.auth-box { background: var(--surface); border-radius: 20px; box-shadow: var(--shadow-lg); width: 100%; max-width: 420px; overflow: hidden; }
-.auth-top { background: var(--primary); padding: 2.5rem 2rem 2rem; text-align: center; }
-.auth-top .logo { width: 56px; height: 56px; background: rgba(255,255,255,0.15); border-radius: 16px; display:flex; align-items:center; justify-content:center; margin: 0 auto 1.25rem; font-size: 1.5rem; color: white; }
-.auth-top h1 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; font-weight: 400; color: white; margin-bottom: 0.35rem; }
-.auth-top p { color: rgba(255,255,255,0.7); font-size: 0.875rem; }
-.auth-body { padding: 2rem; }
-.lockout-box { background: var(--danger-bg); border: 1px solid #fca5a5; border-radius: 10px; padding: 1.25rem; text-align: center; color: var(--danger); }
-.lockout-box i { font-size: 1.75rem; display: block; margin-bottom: 0.5rem; }
-.auth-footer { text-align: center; margin-top: 1.25rem; font-size: 0.875rem; color: var(--text-muted); }
-.auth-footer a { color: var(--primary); font-weight: 500; text-decoration: none; }
+.auth-wrap { min-height:calc(100vh - 60px); display:flex; align-items:center; justify-content:center; margin:-2rem -1.75rem; background:var(--bg); padding:2rem; }
+.auth-box { width:100%; max-width:400px; }
+.auth-logo { text-align:center; margin-bottom:2rem; }
+.auth-logo .icon { width:52px; height:52px; background:var(--teal-dim); border:1px solid rgba(45,212,191,0.25); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:1.3rem; color:var(--teal); margin:0 auto 1rem; }
+.auth-logo h1 { font-family:'Syne',sans-serif; font-size:1.5rem; font-weight:700; color:var(--text); letter-spacing:-0.02em; margin-bottom:0.25rem; }
+.auth-logo p { color:var(--text2); font-size:0.825rem; }
+.auth-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-xl); padding:2rem; }
+.auth-footer { text-align:center; margin-top:1.25rem; font-size:0.825rem; color:var(--text2); }
+.auth-footer a { color:var(--teal); font-weight:500; text-decoration:none; }
+.lockout-box { background:var(--red-dim); border:1px solid rgba(248,113,113,0.25); border-radius:var(--radius); padding:1.25rem; text-align:center; color:var(--red); }
 </style>
 {% endblock %}
 {% block content %}
-<div class="auth-page">
+<div class="auth-wrap">
     <div class="auth-box">
-        <div class="auth-top">
-            <div class="logo"><i class="fas fa-heart-pulse"></i></div>
-            <h1>Welcome Back</h1>
-            <p>Sign in to your MediSecure account</p>
+        <div class="auth-logo">
+            <div class="icon"><i class="fas fa-plus"></i></div>
+            <h1>MediSecure</h1>
+            <p>Sign in to your account</p>
         </div>
-        <div class="auth-body">
+        <div class="auth-card">
             {% if locked %}
             <div class="lockout-box">
-                <i class="fas fa-lock"></i>
-                <strong>Account Temporarily Locked</strong>
-                <p style="font-size:0.85rem;margin-top:0.35rem">Too many failed attempts. Please try again in {{ remaining }} seconds.</p>
+                <i class="fas fa-lock" style="font-size:1.5rem;display:block;margin-bottom:0.5rem"></i>
+                <strong>Account Locked</strong>
+                <p style="font-size:0.8rem;margin-top:0.3rem">Try again in {{ remaining }} seconds.</p>
             </div>
             {% else %}
             <form method="POST">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label class="form-label">Username</label>
-                    {{ form.username }}
+                    <label class="form-label">Username</label>{{ form.username }}
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Password</label>
-                    {{ form.password }}
+                    <label class="form-label">Password</label>{{ form.password }}
                 </div>
                 {% if form.non_field_errors %}
                 <div class="alert alert-danger" style="margin-bottom:1rem">{{ form.non_field_errors.0 }}</div>
                 {% endif %}
-                <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:0.5rem">
-                    Sign In
-                </button>
+                <button type="submit" class="btn btn-primary btn-full btn-lg" style="margin-top:0.5rem">Sign In</button>
             </form>
             {% endif %}
-            <div class="auth-footer">
-                Don't have an account? <a href="{% url 'register' %}">Register here</a>
-            </div>
         </div>
+        <div class="auth-footer">No account? <a href="{% url 'register' %}">Register here</a></div>
     </div>
 </div>
 {% endblock %}

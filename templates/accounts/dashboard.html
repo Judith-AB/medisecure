@@ -2,68 +2,53 @@
 {% block title %}Dashboard — MediSecure{% endblock %}
 {% block extra_css %}
 <style>
-.dash-hero { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); border-radius: var(--radius-lg); padding: 2rem 2.5rem; color: white; margin-bottom: 1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; }
-.dash-hero h1 { font-family: 'DM Serif Display', serif; font-size: 1.75rem; font-weight: 400; margin-bottom: 0.25rem; }
-.dash-hero p { opacity: 0.8; font-size: 0.9rem; }
-.dash-hero .hero-icon { width: 64px; height: 64px; background: rgba(255,255,255,0.15); border-radius: 16px; display:flex; align-items:center; justify-content:center; font-size: 1.75rem; }
-.stat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; display: flex; align-items: center; gap: 1.25rem; }
-.stat-icon { width: 48px; height: 48px; border-radius: 12px; display:flex; align-items:center; justify-content:center; font-size: 1.1rem; flex-shrink: 0; }
-.stat-icon-blue { background: var(--primary-light); color: var(--primary); }
-.stat-icon-green { background: var(--success-bg); color: var(--success); }
-.stat-icon-orange { background: var(--warning-bg); color: var(--warning); }
-.stat-num { font-size: 1.75rem; font-weight: 700; color: var(--text); line-height: 1; }
-.stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 3px; }
-.section-title { font-family: 'DM Serif Display', serif; font-size: 1.15rem; font-weight: 400; color: var(--text); margin-bottom: 1rem; }
-.appt-item { display:flex; justify-content:space-between; align-items:center; padding: 1rem 0; border-bottom: 1px solid var(--border); }
-.appt-item:last-child { border-bottom: none; }
-.appt-name { font-weight: 600; font-size: 0.9rem; }
-.appt-meta { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-.quick-actions { display: grid; grid-template-columns: repeat(2,1fr); gap: 0.75rem; }
-.quick-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem; text-decoration: none; color: var(--text); transition: all 0.15s; display: flex; align-items: center; gap: 0.75rem; }
-.quick-btn:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary); }
-.quick-btn i { width: 36px; height: 36px; border-radius: 9px; background: var(--primary-light); color: var(--primary); display:flex; align-items:center; justify-content:center; font-size: 0.95rem; flex-shrink: 0; }
-.quick-btn span { font-size: 0.875rem; font-weight: 500; }
+.dash-hero { background:linear-gradient(135deg, #0e2a3a 0%, #0a1f2e 100%); border:1px solid rgba(45,212,191,0.15); border-radius:var(--radius-xl); padding:2rem 2.5rem; margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; position:relative; overflow:hidden; }
+.dash-hero::before { content:''; position:absolute; top:-40px; right:-40px; width:200px; height:200px; background:radial-gradient(circle, rgba(45,212,191,0.08) 0%, transparent 70%); }
+.dash-hero h1 { font-family:'Syne',sans-serif; font-size:1.65rem; font-weight:700; color:#fff; letter-spacing:-0.02em; margin-bottom:0.3rem; }
+.dash-hero p { color:rgba(255,255,255,0.55); font-size:0.85rem; }
+.hero-icon { width:60px; height:60px; background:rgba(45,212,191,0.12); border:1px solid rgba(45,212,191,0.2); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; color:var(--teal); flex-shrink:0; }
+.stat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.5rem; }
+.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); padding:1.35rem 1.5rem; display:flex; align-items:center; gap:1rem; transition:border-color 0.2s; }
+.stat-card:hover { border-color:var(--border2); }
+.stat-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; }
+.stat-num { font-family:'Syne',sans-serif; font-size:1.65rem; font-weight:700; line-height:1; color:var(--text); }
+.stat-label { font-size:0.75rem; color:var(--text2); margin-top:3px; }
+.appt-item { display:flex; justify-content:space-between; align-items:center; padding:0.875rem 0; border-bottom:1px solid var(--border); }
+.appt-item:last-child { border-bottom:none; }
+.appt-name { font-weight:600; font-size:0.85rem; }
+.appt-meta { font-size:0.775rem; color:var(--text2); margin-top:2px; }
+.quick-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0.75rem; }
+.quick-btn { background:var(--bg3); border:1px solid var(--border); border-radius:var(--radius); padding:1rem 1.1rem; text-decoration:none; color:var(--text); transition:all 0.15s; display:flex; align-items:center; gap:0.75rem; }
+.quick-btn:hover { border-color:var(--teal); background:var(--teal-dim); color:var(--teal); }
+.quick-btn i { width:32px; height:32px; border-radius:8px; background:var(--surface2); color:var(--teal); display:flex; align-items:center; justify-content:center; font-size:0.875rem; flex-shrink:0; transition:background 0.15s; }
+.quick-btn:hover i { background:var(--teal-mid); }
+.quick-btn span { font-size:0.825rem; font-weight:500; }
 @media(max-width:768px){ .stat-grid{grid-template-columns:1fr;} }
 </style>
 {% endblock %}
 {% block content %}
-
 <div class="dash-hero">
     <div>
         <h1>Good day, {{ user.first_name|default:user.username }}</h1>
-        <p>
-            {% if profile.is_patient %}Your health, managed in one place.
-            {% elif profile.is_doctor %}{{ profile.specialization|default:"Doctor" }} — manage your patients and appointments.
-            {% else %}System overview and administration.{% endif %}
-        </p>
+        <p>{% if profile.is_patient %}Welcome to your health portal.{% elif profile.is_doctor %}{{ profile.specialization|default:"Doctor dashboard" }}{% else %}System administration{% endif %}</p>
     </div>
     <div class="hero-icon">
-        <i class="fas {% if profile.is_patient %}fa-user-injured{% elif profile.is_doctor %}fa-user-md{% else %}fa-shield-alt{% endif %}"></i>
+        <i class="fas {% if profile.is_patient %}fa-user-injured{% elif profile.is_doctor %}fa-stethoscope{% else %}fa-shield-alt{% endif %}"></i>
     </div>
 </div>
 
 <div class="stat-grid">
     <div class="stat-card">
-        <div class="stat-icon stat-icon-blue"><i class="fas fa-calendar-check"></i></div>
-        <div>
-            <div class="stat-num">{{ appointments|length }}</div>
-            <div class="stat-label">Total Appointments</div>
-        </div>
+        <div class="stat-icon" style="background:var(--teal-dim);color:var(--teal)"><i class="fas fa-calendar-check"></i></div>
+        <div><div class="stat-num">{{ appointments|length }}</div><div class="stat-label">Appointments</div></div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon stat-icon-green"><i class="fas fa-check-circle"></i></div>
-        <div>
-            <div class="stat-num">{{ appointments|length }}</div>
-            <div class="stat-label">{% if profile.is_patient %}Records Available{% else %}Patients Seen{% endif %}</div>
-        </div>
+        <div class="stat-icon" style="background:var(--blue-dim);color:var(--blue)"><i class="fas fa-file-medical"></i></div>
+        <div><div class="stat-num">—</div><div class="stat-label">{% if profile.is_patient %}My Records{% else %}Patient Records{% endif %}</div></div>
     </div>
     <div class="stat-card">
-        <div class="stat-icon stat-icon-orange"><i class="fas fa-clock"></i></div>
-        <div>
-            <div class="stat-num">--</div>
-            <div class="stat-label">Pending Actions</div>
-        </div>
+        <div class="stat-icon" style="background:var(--amber-dim);color:var(--amber)"><i class="fas fa-clock"></i></div>
+        <div><div class="stat-num">—</div><div class="stat-label">Pending</div></div>
     </div>
 </div>
 
@@ -73,31 +58,25 @@
         {% for appt in appointments %}
         <div class="appt-item">
             <div>
-                <div class="appt-name">
-                    {% if profile.is_patient %}Dr. {{ appt.doctor.first_name }} {{ appt.doctor.last_name }}
-                    {% else %}{{ appt.patient.first_name }} {{ appt.patient.last_name }}{% endif %}
-                </div>
+                <div class="appt-name">{% if profile.is_patient %}Dr. {{ appt.doctor.first_name }} {{ appt.doctor.last_name }}{% else %}{{ appt.patient.first_name }} {{ appt.patient.last_name }}{% endif %}</div>
                 <div class="appt-meta">{{ appt.date }} &bull; {{ appt.time }}</div>
             </div>
             <span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span>
         </div>
         {% empty %}
-        <div style="text-align:center;padding:2rem;color:var(--text-muted);font-size:0.875rem">
-            <i class="fas fa-calendar" style="display:block;font-size:1.5rem;margin-bottom:0.5rem;color:var(--border-strong)"></i>
-            No appointments yet
+        <div style="text-align:center;padding:2rem;color:var(--text3);font-size:0.825rem">
+            <i class="fas fa-calendar" style="display:block;font-size:1.25rem;margin-bottom:0.5rem"></i>No appointments yet
         </div>
         {% endfor %}
-        <div class="mt-2">
-            {% if profile.is_patient %}
-            <a href="{% url 'book_appointment' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Book Appointment</a>
-            {% endif %}
+        <div class="mt-2" style="display:flex;gap:0.5rem;flex-wrap:wrap">
+            {% if profile.is_patient %}<a href="{% url 'book_appointment' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Book</a>{% endif %}
             <a href="{% url 'my_appointments' %}" class="btn btn-secondary">View All</a>
         </div>
     </div>
 
     <div class="card card-body">
         <div class="section-title">Quick Actions</div>
-        <div class="quick-actions">
+        <div class="quick-grid">
             {% if profile.is_patient %}
             <a href="{% url 'book_appointment' %}" class="quick-btn"><i class="fas fa-calendar-plus"></i><span>Book Appointment</span></a>
             <a href="{% url 'record_list' %}" class="quick-btn"><i class="fas fa-file-medical"></i><span>My Records</span></a>

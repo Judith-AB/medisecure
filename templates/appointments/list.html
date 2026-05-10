@@ -2,68 +2,33 @@
 {% block title %}Appointments — MediSecure{% endblock %}
 {% block content %}
 <div class="page-header">
-    <div>
-        <h1>Appointments</h1>
-        <p>{% if user.profile.is_patient %}Your scheduled visits{% elif user.profile.is_doctor %}Your patient appointments{% else %}All appointments{% endif %}</p>
-    </div>
-    {% if user.profile.is_patient %}
-    <a href="{% url 'book_appointment' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Book New</a>
-    {% endif %}
+    <div><h1>Appointments</h1><p>{% if user.profile.is_patient %}Your scheduled visits{% elif user.profile.is_doctor %}Your patient appointments{% else %}All appointments{% endif %}</p></div>
+    {% if user.profile.is_patient %}<a href="{% url 'book_appointment' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Book New</a>{% endif %}
 </div>
-
 {% if appointments %}
 <div class="card" style="overflow:hidden">
     <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                {% if user.profile.is_patient %}<th>Doctor</th>{% else %}<th>Patient</th>{% endif %}
-                <th>Date</th>
-                <th>Time</th>
-                <th>Reason</th>
-                <th>Status</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for appt in appointments %}
-            <tr>
-                <td style="color:var(--text-light)">#{{ appt.id }}</td>
-                <td>
-                    {% if user.profile.is_patient %}
-                    <div class="fw-600">Dr. {{ appt.doctor.first_name }} {{ appt.doctor.last_name }}</div>
-                    <div style="font-size:0.78rem;color:var(--text-muted)">{{ appt.doctor.profile.specialization }}</div>
-                    {% else %}
-                    <div class="fw-600">{{ appt.patient.first_name }} {{ appt.patient.last_name }}</div>
-                    <div style="font-size:0.78rem;color:var(--text-muted)">@{{ appt.patient.username }}</div>
-                    {% endif %}
-                </td>
-                <td>{{ appt.date }}</td>
-                <td>{{ appt.time }}</td>
-                <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted)">{{ appt.reason|truncatechars:35 }}</td>
-                <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
-                <td>
-                    <div style="display:flex;gap:0.4rem">
-                        <a href="{% url 'appointment_detail' appt.pk %}" class="btn btn-secondary" style="padding:0.35rem 0.7rem;font-size:0.8rem"><i class="fas fa-eye"></i></a>
-                        {% if user.profile.is_patient and appt.status == 'pending' %}
-                        <a href="{% url 'cancel_appointment' appt.pk %}" class="btn btn-danger" style="padding:0.35rem 0.7rem;font-size:0.8rem"><i class="fas fa-times"></i></a>
-                        {% endif %}
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+        <thead><tr>
+            <th>ID</th>
+            {% if user.profile.is_patient %}<th>Doctor</th>{% else %}<th>Patient</th>{% endif %}
+            <th>Date</th><th>Time</th><th>Reason</th><th>Status</th><th></th>
+        </tr></thead>
+        <tbody>{% for appt in appointments %}
+        <tr>
+            <td style="color:var(--text3)">#{{ appt.id }}</td>
+            <td>{% if user.profile.is_patient %}<div class="fw-600">Dr. {{ appt.doctor.first_name }} {{ appt.doctor.last_name }}</div><div style="font-size:0.75rem;color:var(--text2)">{{ appt.doctor.profile.specialization }}</div>
+            {% else %}<div class="fw-600">{{ appt.patient.first_name }} {{ appt.patient.last_name }}</div><div style="font-size:0.75rem;color:var(--text2)">@{{ appt.patient.username }}</div>{% endif %}</td>
+            <td>{{ appt.date }}</td><td>{{ appt.time }}</td>
+            <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">{{ appt.reason|truncatechars:35 }}</td>
+            <td><span class="badge badge-{{ appt.status }}">{{ appt.get_status_display }}</span></td>
+            <td><div style="display:flex;gap:0.4rem">
+                <a href="{% url 'appointment_detail' appt.pk %}" class="btn btn-secondary" style="padding:0.3rem 0.65rem;font-size:0.775rem"><i class="fas fa-eye"></i></a>
+                {% if user.profile.is_patient and appt.status == 'pending' %}<a href="{% url 'cancel_appointment' appt.pk %}" class="btn btn-danger" style="padding:0.3rem 0.65rem;font-size:0.775rem"><i class="fas fa-times"></i></a>{% endif %}
+            </div></td>
+        </tr>{% endfor %}</tbody>
     </table>
 </div>
 {% else %}
-<div class="card">
-    <div class="empty-state">
-        <i class="fas fa-calendar-times"></i>
-        <p>No appointments found.</p>
-        {% if user.profile.is_patient %}
-        <a href="{% url 'book_appointment' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Book Your First Appointment</a>
-        {% endif %}
-    </div>
-</div>
+<div class="card"><div class="empty-state"><i class="fas fa-calendar-times"></i><p>No appointments found.</p>{% if user.profile.is_patient %}<a href="{% url 'book_appointment' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Book Your First</a>{% endif %}</div></div>
 {% endif %}
 {% endblock %}

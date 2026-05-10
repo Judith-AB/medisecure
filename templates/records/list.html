@@ -2,64 +2,34 @@
 {% block title %}Medical Records — MediSecure{% endblock %}
 {% block content %}
 <div class="page-header">
-    <div>
-        <h1>Medical Records</h1>
-        <p>{% if user.profile.is_patient %}Your personal health records{% elif user.profile.is_doctor %}Records you have created{% else %}All patient records{% endif %}</p>
-    </div>
-    {% if user.profile.is_doctor or user.profile.is_admin %}
-    <a href="{% url 'create_record' %}" class="btn btn-primary"><i class="fas fa-plus"></i> New Record</a>
-    {% endif %}
+    <div><h1>Medical Records</h1><p>{% if user.profile.is_patient %}Your health records{% elif user.profile.is_doctor %}Records you created{% else %}All patient records{% endif %}</p></div>
+    {% if user.profile.is_doctor or user.profile.is_admin %}<a href="{% url 'create_record' %}" class="btn btn-primary"><i class="fas fa-plus"></i> New Record</a>{% endif %}
 </div>
-
 {% if records %}
 <div class="card" style="overflow:hidden">
     <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                {% if not user.profile.is_patient %}<th>Patient</th>{% endif %}
-                {% if not user.profile.is_doctor %}<th>Doctor</th>{% endif %}
-                <th>Title</th>
-                <th>Diagnosis</th>
-                <th>Date</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in records %}
-            <tr>
-                <td style="color:var(--text-light)">#{{ record.id }}</td>
-                {% if not user.profile.is_patient %}
-                <td>
-                    <div class="fw-600">{{ record.patient.first_name }} {{ record.patient.last_name }}</div>
-                    <div style="font-size:0.78rem;color:var(--text-muted)">@{{ record.patient.username }}</div>
-                </td>
-                {% endif %}
-                {% if not user.profile.is_doctor %}
-                <td>Dr. {{ record.doctor.first_name }} {{ record.doctor.last_name }}</td>
-                {% endif %}
-                <td class="fw-600">{{ record.title }}</td>
-                <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-muted)">{{ record.diagnosis|truncatechars:45 }}</td>
-                <td style="color:var(--text-muted)">{{ record.created_at|date:"M d, Y" }}</td>
-                <td>
-                    <div style="display:flex;gap:0.4rem">
-                        <a href="{% url 'record_detail' record.pk %}" class="btn btn-secondary" style="padding:0.35rem 0.7rem;font-size:0.8rem"><i class="fas fa-eye"></i> View</a>
-                        {% if user.profile.is_doctor and record.doctor == user or user.profile.is_admin %}
-                        <a href="{% url 'delete_record' record.pk %}" class="btn btn-danger" style="padding:0.35rem 0.7rem;font-size:0.8rem"><i class="fas fa-trash"></i></a>
-                        {% endif %}
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+        <thead><tr>
+            <th>ID</th>
+            {% if not user.profile.is_patient %}<th>Patient</th>{% endif %}
+            {% if not user.profile.is_doctor %}<th>Doctor</th>{% endif %}
+            <th>Title</th><th>Diagnosis</th><th>Date</th><th></th>
+        </tr></thead>
+        <tbody>{% for record in records %}
+        <tr>
+            <td style="color:var(--text3)">#{{ record.id }}</td>
+            {% if not user.profile.is_patient %}<td><div class="fw-600">{{ record.patient.first_name }} {{ record.patient.last_name }}</div><div style="font-size:0.75rem;color:var(--text2)">@{{ record.patient.username }}</div></td>{% endif %}
+            {% if not user.profile.is_doctor %}<td style="font-size:0.85rem">Dr. {{ record.doctor.first_name }} {{ record.doctor.last_name }}</td>{% endif %}
+            <td class="fw-600">{{ record.title }}</td>
+            <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text2)">{{ record.diagnosis|truncatechars:45 }}</td>
+            <td style="color:var(--text2)">{{ record.created_at|date:"M d, Y" }}</td>
+            <td><div style="display:flex;gap:0.4rem">
+                <a href="{% url 'record_detail' record.pk %}" class="btn btn-secondary" style="padding:0.3rem 0.65rem;font-size:0.775rem"><i class="fas fa-eye"></i></a>
+                {% if user.profile.is_doctor and record.doctor == user or user.profile.is_admin %}<a href="{% url 'delete_record' record.pk %}" class="btn btn-danger" style="padding:0.3rem 0.65rem;font-size:0.775rem"><i class="fas fa-trash"></i></a>{% endif %}
+            </div></td>
+        </tr>{% endfor %}</tbody>
     </table>
 </div>
 {% else %}
-<div class="card">
-    <div class="empty-state">
-        <i class="fas fa-file-medical"></i>
-        <p>No medical records found.</p>
-    </div>
-</div>
+<div class="card"><div class="empty-state"><i class="fas fa-file-medical"></i><p>No medical records found.</p></div></div>
 {% endif %}
 {% endblock %}

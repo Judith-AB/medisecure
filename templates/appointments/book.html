@@ -1,39 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}Book Appointment — MediSecure{% endblock %}
 {% block content %}
-<div class="page-header">
-    <div>
-        <h1>Book an Appointment</h1>
-        <p>Schedule a visit with one of our doctors</p>
-    </div>
-</div>
-<div style="max-width:620px">
+<div class="page-header"><div><h1>Book Appointment</h1><p>Schedule a visit with one of our doctors</p></div></div>
+<div style="max-width:580px">
     <div class="card card-body">
-        <form method="POST">
-            {% csrf_token %}
-            <div class="form-group">
-                <label class="form-label">Select Doctor</label>
-                {{ form.doctor }}
-                {% if form.doctor.errors %}<ul class="errorlist">{% for e in form.doctor.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-            </div>
+        <form method="POST">{% csrf_token %}
+            <div class="form-group"><label class="form-label">Doctor</label>{{ form.doctor }}{% if form.doctor.errors %}<ul class="errorlist">{% for e in form.doctor.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
             <div class="grid grid-2">
-                <div class="form-group">
-                    <label class="form-label">Date</label>
-                    {{ form.date }}
-                    {% if form.date.errors %}<ul class="errorlist">{% for e in form.date.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Preferred Time</label>
-                    {{ form.time }}
-                </div>
+                <div class="form-group"><label class="form-label">Date</label>{{ form.date }}{% if form.date.errors %}<ul class="errorlist">{% for e in form.date.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
+                <div class="form-group"><label class="form-label">Time</label>{{ form.time }}</div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Reason for Visit</label>
-                {{ form.reason }}
-                {% if form.reason.errors %}<ul class="errorlist">{% for e in form.reason.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
-            </div>
+            <div class="form-group"><label class="form-label">Reason for Visit</label>{{ form.reason }}{% if form.reason.errors %}<ul class="errorlist">{% for e in form.reason.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}</div>
             <div style="display:flex;gap:0.75rem;margin-top:0.5rem">
-                <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-check"></i> Confirm Booking</button>
+                <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-check"></i> Confirm</button>
                 <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg">Cancel</a>
             </div>
         </form>

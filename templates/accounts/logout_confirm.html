@@ -1,17 +1,14 @@
 {% extends 'base.html' %}
 {% block title %}Sign Out — MediSecure{% endblock %}
 {% block content %}
-<div style="max-width:400px;margin:4rem auto;text-align:center">
+<div style="max-width:380px;margin:4rem auto;text-align:center">
     <div class="card card-body">
-        <div style="width:56px;height:56px;background:var(--danger-bg);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--danger);margin:0 auto 1.25rem">
+        <div style="width:52px;height:52px;background:var(--red-dim);border:1px solid rgba(248,113,113,0.2);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;color:var(--red);margin:0 auto 1.25rem">
             <i class="fas fa-sign-out-alt"></i>
         </div>
-        <h2 style="font-family:'DM Serif Display',serif;font-weight:400;margin-bottom:0.5rem">Sign Out?</h2>
-        <p style="color:var(--text-muted);font-size:0.875rem;margin-bottom:1.5rem">You will be securely signed out of your account.</p>
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger btn-full btn-lg"><i class="fas fa-sign-out-alt"></i> Yes, Sign Out</button>
-        </form>
+        <h2 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:0.5rem">Sign Out?</h2>
+        <p style="color:var(--text2);font-size:0.825rem;margin-bottom:1.5rem">You will be securely signed out of MediSecure.</p>
+        <form method="POST">{% csrf_token %}<button type="submit" class="btn btn-danger btn-full btn-lg"><i class="fas fa-sign-out-alt"></i> Yes, Sign Out</button></form>
         <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-full mt-2">Cancel</a>
     </div>
 </div>
